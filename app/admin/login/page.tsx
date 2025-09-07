@@ -14,6 +14,8 @@ import { supabase } from '@/lib/supabase-client';
 import type { Database } from '@/lib/database.types';
 import { Shield } from 'lucide-react';
 
+type Profile = Database['public']['Tables']['profiles']['Row'];
+
 export default function AdminLoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -40,11 +42,17 @@ export default function AdminLoginPage() {
       }
 
       // Step 2: Verify admin status from database
-      const { data: profileData, error: profileError } = await supabase
+      if (!supabase) {
+        console.error('❌ Supabase client not initialized');
+        toast.error('Authentication service unavailable');
+        return;
+      }
+
+const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('is_admin')
         .eq('id', data.user.id)
-        .single();
+        .single<{ is_admin: boolean }>();
 
       if (profileError) {
         console.error('❌ Failed to fetch user profile:', profileError);
