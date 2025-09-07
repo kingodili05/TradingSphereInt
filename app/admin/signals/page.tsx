@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { AdminLayout } from '@/components/layout/admin-layout';
 import { TradeSignalManagement } from '@/components/admin/trade-signal-management';
 import { TradeExecutionDashboard } from '@/components/admin/trade-execution-dashboard';
